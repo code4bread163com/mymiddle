@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!-- 日志路径 -->
+    <springProperty scope="context" name="logging.path" source="log.path" defaultValue="log"/>
+    <springProperty scope="context" name="log.module.name" source="spring.application.name"/>
+
+    <!-- 日志级别 -->
+    <property name="log.root.level" value="INFO"/>
+    <property name="log.sql.level" value="DEBUG"/>
+
+    <!-- 日志文件大小,超过这个大小将被压缩 -->
+    <property name="log.max.size" value="200MB"/>
+
+    <!-- 日志打印格式 -->
+    <property name="log.pattern" value="[%date][%level][%tid][%thread][%logger][%file : %line] - %msg%n"/>
+
+    <!--控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <pattern>${log.pattern}</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- 用来保存输出所有级别的日志 -->
+    <appender name="file.all" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${logging.path}/${log.module.name}.log</File>
+
+        <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件。 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logging.path}/history/${log.module.name}_%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${log.max.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!-- 日志输出的文件的格式 -->
+        <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+            <pattern>${log.pattern}</pattern>
+        </layout>
+    </appender>
+
+    <appender name="file.async" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- queue满了，不丢弃，block线程，默认如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="file.all"/>
+    </appender>
+
+
+    <root level="${log.root.level}">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="file.async"/>
+    </root>
+</included>

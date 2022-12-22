@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>BPMN_2_0</ID>
+  <OriginalElement>flowPath=/Users/admin/Documents/myprojects/mymiddleware/activiti/src/main/resources/test.xml</OriginalElement>
+  <nodes>
+    <node x="18.0" y="84.0">interface com.intellij.jboss.jbpm.model.xml.bpmn20.TUserTask @127423</node>
+    <node x="10.0" y="0.0">interface com.intellij.jboss.jbpm.model.xml.bpmn20.TStartEvent @127420</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="interface com.intellij.jboss.jbpm.model.xml.bpmn20.TStartEvent @127420" target="interface com.intellij.jboss.jbpm.model.xml.bpmn20.TUserTask @127423">
+      <point x="0.0" y="15.0" />
+      <point x="0.0" y="-15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="66.0" y="57.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Details</Category>
+  </Categories>
+</Diagram>
+
